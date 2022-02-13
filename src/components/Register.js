@@ -1,10 +1,9 @@
 import { useState } from "react";
 import {Link} from "react-router-dom";
-import { useHistory } from "react-router-dom";
+
 
 
 function Register ({onSubmit}) {
-  const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -17,8 +16,6 @@ function Register ({onSubmit}) {
     }
 
     const handleSubmit = (e) => {
-      debugger;
-      var thiu = this;
         e.preventDefault();
         onSubmit(email, password)
     }

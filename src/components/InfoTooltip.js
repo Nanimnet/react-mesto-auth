@@ -9,7 +9,7 @@ function InfoTooltip({onClose, isOpen, isRegSucces, message}) {
       <div className="popup__content popup-info__content">
         <img
           className="popup__image popup-info__image"
-          src={isRegSucces ? Success:Fail} />
+          src={isRegSucces ? Success : Fail} />
         <h3 className="popup-info__heading">{isRegSucces ?
                     "Вы успешно зарегистрировались":
                     "Что-то пошло не так! Попробуйте еще раз." + message

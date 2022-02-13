@@ -36,16 +36,12 @@ function App() {
   });
   const [cards, setCards] = useState([]);
   const [cardToDelete, setCardToDelete] = React.useState({});
-
+  
   React.useEffect(() => {
     if (isLoggedIn) {
-      // history.push("/");
+      history.push("/");
     }
   }, [history, isLoggedIn]);
-
-  // React.useEffect(() => {
-  //   handleTokenCheck();
-  // }, []);
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -124,7 +120,8 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
-    setInfoPopupOpen(false)
+    setInfoPopupOpen(false);
+    setRegSuccess(false)
     setSelectedCard(null);
   }
 
@@ -179,39 +176,26 @@ function App() {
   }
 
   //регистрация и открытие и закрытие инфо попапов
-  const handleRegSubmit = (email, password) => {
-    var thay = this;
-    debugger;
-    history.push("/")
-    
+  const handleRegSubmit = (email, password) => {  
     auth
       .register(email, password)
       .then((res) => {
         debugger;
-        
-        return res.json()
+        setInfoPopupOpen(false);
+        setRegSuccess(true);
+        history.push('/');
       })
-      .then((res)=> {
-        if (res.error) {
-          console.log(res.error)
-        } 
-         return res
-    })
-      .then((res) => {
-        if (res.error) {
-          setInfoPopupOpen(true);
-          seterrorMessage(res.error);
-          setRegSuccess(false);
-        } else {
-          setInfoPopupOpen(false);
-          setRegSuccess(true);
-        }
-        return res 
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    .catch(err=>{
+      if(err.status === 400){
+          console.log('Некорректно заполнено одно из полей ')
+      }
+      setInfoPopupOpen(true);
+      setRegSuccess(false);
+      console.log(err)
+  })
   }
+
+
 
   //вход и открытие закрытие попапов
   function handleLoginSubmit(email, password) {
@@ -221,7 +205,7 @@ function App() {
         localStorage.setItem("jwt", res.token)
         setLoggedIn(true);
         setEmail(email);
-        // history.push("/signup")
+        history.push("/")
       })
       .catch((err)=>{
         if(err.status === 400) {
@@ -242,23 +226,22 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Router>
+      
       <div className="root">
         <Header email={email} onSignOut={handleSignOut}/>
         <Switch>
           <ProtectedRoute
             exact
             path="/"
-            // component={Main}
-          >
-            <Main isLoggedIn={isLoggedIn}
+            component={Main}
+            isLoggedIn={isLoggedIn}
             onCardClick={handleCardClick}
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
             cards={cards}
             onCardLike={handleLikeCard}
-            onCardDelete={handleCardDelete}/>
+            onCardDelete={handleCardDelete}>
           </ProtectedRoute>
           <Route path="/signin">
             <Login onSubmit={handleLoginSubmit} />
@@ -302,7 +285,6 @@ function App() {
         />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
-      </Router>
     </CurrentUserContext.Provider>
   );
 }

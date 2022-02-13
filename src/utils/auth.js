@@ -5,7 +5,6 @@ export const register = (email, password) => {
     return fetch(`${BASE_URL}/signup`, {
         method: "POST",
         headers: {
-            "Authorization" : apiUserData.userAuthorizationToken,
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
@@ -13,6 +12,10 @@ export const register = (email, password) => {
             "email": email,
             "password": password,
         })
+    })
+
+    .then((res)=> {
+        res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
     })
 }
 
