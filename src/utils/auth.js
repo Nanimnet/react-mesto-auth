@@ -1,6 +1,11 @@
 import { apiUserData } from "./utils.js"; 
 const BASE_URL = 'https://auth.nomoreparties.co';
 
+function checkResponse(res) {
+    // return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
+    return res.json();
+}
+
 export const register = (email, password) => {
     return fetch(`${BASE_URL}/signup`, {
         method: "POST",
@@ -14,8 +19,12 @@ export const register = (email, password) => {
         })
     })
 
-    .then((res)=> {
-        res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
+    .then(checkResponse)
+    .then((res) => {
+        if (res.error || res.message) {
+           return Promise.reject(`Ошибка: ${res.error || res.message}`)
+        }
+        return res
     })
 }
 
@@ -31,9 +40,7 @@ export const login = (email, password) => {
         })
     })
 
-    .then((res)=>{
-        return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    })
+    .then(checkResponse)
 
     .then((data) => {
         if (data.token){
@@ -52,7 +59,5 @@ export const checkToken = (jwt) => {
         }
     })
 
-    .then((res) => {
-        res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    })
+    .then(checkResponse)
 }

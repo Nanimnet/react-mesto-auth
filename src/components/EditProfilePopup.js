@@ -47,7 +47,6 @@ function EditProfilePopup(props) {
           name="profile"
           title="Редактировать профиль"
         >
-          <>
             <input 
               minLength="2"
               maxLength="40"
@@ -74,7 +73,6 @@ function EditProfilePopup(props) {
               onChange={handleDescriptionChange}
             />
             <span id="subheading-profile-error" className="error"></span>
-          </>
         </PopupWithForm>
     )
 }

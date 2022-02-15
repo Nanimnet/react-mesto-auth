@@ -30,7 +30,6 @@ function AddPlacePopup(props) {
           name="add"
           title="Новое место"
         >
-          <>
             <input
               minLength="2"
               maxLength="30"
@@ -53,7 +52,6 @@ function AddPlacePopup(props) {
               ref={newLinkCardRef}
             />
             <span id="link-place-error" className="error"></span>
-          </>
         </PopupWithForm>
     )
 }

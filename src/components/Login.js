@@ -25,6 +25,7 @@ function Login({onSubmit}) {
             onSubmit={handleSubmit}>
           <h1 className="form__heading">Вход</h1>
           <input
+            autocomplete
             onChange={handleEmailChande}
             minLength="2"
             maxLength="40"

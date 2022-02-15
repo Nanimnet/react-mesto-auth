@@ -36,6 +36,14 @@ function App() {
   });
   const [cards, setCards] = useState([]);
   const [cardToDelete, setCardToDelete] = React.useState({});
+
+  React.useEffect(() => {
+    const jwt = localStorage.getItem("jwt"); 
+    const email = localStorage.getItem("email");
+    if (email && jwt) {
+      setEmail(email);
+    }
+  }, []);
   
   React.useEffect(() => {
     if (isLoggedIn) {
@@ -164,6 +172,7 @@ function App() {
         .then((res) => {
           setLoggedIn(true);
           setEmail(res.data.email);
+          localStorage.setItem("email", res.data.email)
           history.push("/");
         })
         .catch((err) => {
@@ -180,15 +189,12 @@ function App() {
     auth
       .register(email, password)
       .then((res) => {
-        debugger;
         setInfoPopupOpen(false);
         setRegSuccess(true);
         history.push('/');
       })
     .catch(err=>{
-      if(err.status === 400){
-          console.log('Некорректно заполнено одно из полей ')
-      }
+      seterrorMessage(err);
       setInfoPopupOpen(true);
       setRegSuccess(false);
       console.log(err)
@@ -202,7 +208,8 @@ function App() {
     auth
       .login(email, password)
       .then(res => {
-        localStorage.setItem("jwt", res.token)
+        localStorage.setItem("jwt", res.token);
+        localStorage.setItem("email", email);
         setLoggedIn(true);
         setEmail(email);
         history.push("/")
@@ -220,6 +227,7 @@ function App() {
 
   function handleSignOut() {
     localStorage.removeItem('jwt');
+    localStorage.removeItem("email");
     setLoggedIn(false);
     history.push("/signin")
   }
