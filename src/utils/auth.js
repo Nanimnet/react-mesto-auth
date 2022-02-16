@@ -2,8 +2,9 @@ import { apiUserData } from "./utils.js";
 const BASE_URL = 'https://auth.nomoreparties.co';
 
 function checkResponse(res) {
-    // return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    return res.json();
+     if (res.ok) {
+         return res.json()
+     } 
 }
 
 export const register = (email, password) => {
